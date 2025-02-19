@@ -12,29 +12,29 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
-import javax.annotation.PostConstruct;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final UserDao userDao;
+
     @Autowired
     public UserServiceImpl(UserDao userRepository) {
         this.userDao = userRepository;
     }
 
-    public User findByUsername (String username) {
-        return  userDao.findByUsername(username);
+    public User findByUsername(String username) {
+        return userDao.findByUsername(username);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
+        System.out.print("////////////////////////" + user.getRoles());
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -51,13 +51,14 @@ public class UserServiceImpl implements UserService{
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.save(user);
     }
+
     @Transactional
     public List<User> getAllUsers() {
         return userDao.findAll();
     }
 
     @Transactional
-    public void update (User user) {
+    public void update(User user) {
         User updateUser = show(user.getId());
         if (updateUser != null) {
             updateUser.setUsername(user.getUsername());
@@ -65,14 +66,14 @@ public class UserServiceImpl implements UserService{
             userDao.save(user);
         }
     }
+
     @Transactional
-    public User show (long id) {
+    public User show(long id) {
         return userDao.getById(id);
     }
 
     @Transactional
-    public void delete (long id) {
+    public void delete(long id) {
         userDao.deleteById(id);
     }
-
 }

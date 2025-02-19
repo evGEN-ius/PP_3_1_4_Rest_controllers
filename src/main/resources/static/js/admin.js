@@ -3,10 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
     getAllUsers()
 
 });
+
 function getCurrentAdmin() {
     fetch("/api/currentAdmin")
-        .then( response => response.json())
-        .then( user=> {
+        .then(response => response.json())
+        .then(user => {
             document.getElementById("adminEmail").textContent = user.username;
             document.getElementById("adminRole").textContent = user.roles.map(role => role.name.replace('ROLE_', ' '));
             let tableAdmin = ""
@@ -23,10 +24,11 @@ function getCurrentAdmin() {
             document.getElementById("UserAdmin").innerHTML = tableAdmin
         })
 }
+
 function getAllUsers() {
     fetch("/api/allUser")
-        .then( response => response.json())
-        .then( response => {
+        .then(response => response.json())
+        .then(response => {
             let tableUser = ""
             response.forEach(user => {
                 tableUser += `
@@ -51,16 +53,19 @@ function getAllUsers() {
             document.getElementById("allUsers").innerHTML = tableUser
         })
 }
-function setModalValue(id,firstName,lastName,age,username) {
+
+function setModalValue(id, firstName, lastName, age, username) {
     document.getElementById("editUserId1").value = id;
     document.getElementById("editFirstName").value = firstName;
     document.getElementById("editLastName").value = lastName;
     document.getElementById("editAge").value = age;
-    document.getElementById("editEmail").value =username;
+    document.getElementById("editEmail").value = username;
 }
+
 function confirmDelete() {
     return confirm('Вы уверены, что хотите удалить этого пользователя?');
 }
+
 function userDelete(userId) {
     fetch(`/api/delete/${userId}`).then(() => {
         getAllUsers()
@@ -68,6 +73,7 @@ function userDelete(userId) {
         document.getElementById('adminTable').click()
     })
 }
+
 document.getElementById('formCreateNewUser').addEventListener('submit', function (event) {
     event.preventDefault();
     const formData = new FormData(this);
@@ -75,7 +81,6 @@ document.getElementById('formCreateNewUser').addEventListener('submit', function
         id: option.value,
         name: option.text
     }))
-
     let newUser = {
         firstName: formData.get('firstName'),
         lastName: formData.get('lastName'),

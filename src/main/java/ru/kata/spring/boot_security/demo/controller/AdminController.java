@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.security.Principal;
@@ -16,10 +17,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api")
 public class AdminController {
+    private final UserService userService;
 
-    private final UserServiceImpl userService;
     @Autowired
-    public AdminController(UserServiceImpl userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
@@ -28,7 +29,7 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-    @GetMapping( "/currentAdmin")
+    @GetMapping("/currentAdmin")
     public User getCurrentAdmin(Principal principal) {
         return userService.findByUsername(principal.getName());
     }
@@ -42,9 +43,9 @@ public class AdminController {
     public void updateUser(@RequestBody User user) {
         userService.update(user);
     }
+
     @GetMapping("/delete/{id}")
     public void deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
     }
-
 }

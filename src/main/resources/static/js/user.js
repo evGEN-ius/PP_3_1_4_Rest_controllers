@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function getCurrentUser() {
     fetch("/api/user")
-        .then( response => response.json())
-        .then( user=> {
+        .then(response => response.json())
+        .then(user => {
 
             document.getElementById("userEmail").textContent = user.username;
             document.getElementById("userRole").textContent = user.roles.map(role => role.name.replace('ROLE_', ' '));
